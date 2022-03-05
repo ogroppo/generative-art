@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Chaos</title>
+	</head>
+	<body>
+		<style media="screen">
+			#board{
+				border: 1px solid black;
+				width: 450px;
+				height: 300px;
+				position: relative;
+			}
+			span{
+				position: absolute;
+				height: 2px;
+				width: 2px;
+				display: inline-block;
+				background-color: red;
+				border-radius: 50%;
+			}
+			a{
+				position: absolute;
+				height: 5px;
+				width: 5px;
+				display: inline-block;
+				background-color: blue;
+				border-radius: 50%;
+			}
+		</style>
+		<div id="board">
+
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+
+		let anchorPoints = {
+			1: {x: 50, y: 50},
+			2: {x: 250, y: 150},
+			3: {x: 50, y: 250},
+			//4: {x: 200, y: 20},
+			// 5: {x: 100, y: 280}
+		}
+
+		let points = []
+
+		let randomDot = {
+			x: 400, y: 100
+		}
+
+		points.push(randomDot)
+
+		let iterations = 50000;
+		for (var i = 1; i < iterations; i++) {
+			let diceNumber = rollDice();
+			let anchorCoords = anchorPoints[diceNumber];
+
+			let newDot = calcNewDot(points[i-1], anchorPoints[diceNumber]);
+
+			points.push(newDot);
+		}
+
+		function calcNewDot(point, anchor){
+			let x = (anchor.x + point.x)/2;
+			let y = (anchor.y + point.y)/2;
+			return {
+				x: x,
+				y: y
+			}
+		}
+
+		function rollDice(){
+			return Math.floor(Object.keys(anchorPoints).length*Math.random())+1;
+		}
+
+		let board = $("#board")
+		for (let key in anchorPoints){
+			let anchorPoint = anchorPoints[key]
+			let a = $("<a>").css('left', anchorPoint.x + 'px').css('top', anchorPoint.y + 'px');
+			board.append(a)
+		}
+
+		points.forEach(point => {
+			let span = $("<span>").css('left', point.x + 'px').css('top', point.y + 'px');
+			board.append(span)
+		})
+
+
+		</script>
+	</body>
+</html>
